@@ -1,0 +1,7 @@
+[report]
+omit =
+    setup.py
+    betaXMLERandSQLER3/__main__.py
+    betaXMLERandSQLER3/_version.py
+    versioneer.py
+    tests/*
