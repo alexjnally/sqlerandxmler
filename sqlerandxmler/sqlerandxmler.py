@@ -14,7 +14,7 @@ pd.set_option('max_colwidth', 25)
 
 
 
-class xmler2:
+class xmler:
     def __init__(self, xml, xmlcol):
         self.xml = xml
         self.xmlcol = xmlcol
@@ -63,7 +63,7 @@ class xmler2:
             return None
 
 
-class sqler2:
+class sqler:
 
     def __init__(self, query_text, database='SQL12'):
         self.c1 = time()
@@ -98,7 +98,7 @@ class sqler2:
                     if len(tag) > 1:
                         raise TypeError('Dict must be length 1')
                     else:
-                        self.data[str(list(tag.values())[0]) + '_py'] = (self.data[xmlcol].apply(lambda xml: xmler2(xml, self.xmlcol) if xml is not None else None)).apply(lambda col: col.find_xpath(list(tag.keys())[0]) if col is not None else None)
+                        self.data[str(list(tag.values())[0]) + '_py'] = (self.data[xmlcol].apply(lambda xml: xmler(xml, self.xmlcol) if xml is not None else None)).apply(lambda col: col.find_xpath(list(tag.keys())[0]) if col is not None else None)
                 else:
                     splitter = tag.split('//')
                     if splitter[-1] in ('Code'):
@@ -113,7 +113,7 @@ class sqler2:
                     else:
                         colname = splitter[-1] + '_py'
 
-                    self.data[colname] = (self.data[xmlcol].apply(lambda xml: xmler2(xml, self.xmlcol) if xml is not None else None)).apply(lambda col: col.find_xpath(tag) if col is not None else None)
+                    self.data[colname] = (self.data[xmlcol].apply(lambda xml: xmler(xml, self.xmlcol) if xml is not None else None)).apply(lambda col: col.find_xpath(tag) if col is not None else None)
 
 #         del self.data['Root']   ##################
 
@@ -125,7 +125,7 @@ class sqler2:
         print('Parsing Time:    ' + str(self.ptime)[:4] + ' s')
 
 
-    def save(self, to_file='QueryResults/PythonQueryResults.csv'):
+    def save(self, to_file='PythonQueryResults.csv'):
         """
         This does that.
         """
@@ -137,7 +137,8 @@ class sqler2:
         elif to_file[-5:] == '.xlsx':
             ftype = 2
         else:
-            raise TypeError('File must be .csv or .xlsx')
+            to_file = to_file + '.csv'
+            ftype = 1
 
         for col in ('InterConnectResponse', 'InterConnectRequest', 'Response', 'Request', 'RawSoapResponse', 'RawSoapRequest'):
             if col in self.data.columns:
